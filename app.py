@@ -1,4 +1,3 @@
-
 import json, os
 import numpy as np
 import streamlit as st
@@ -49,21 +48,21 @@ def load_generator():
 
 G, Z_DIM = load_generator()
 def _load_cascade():
-       name = "haarcascade_frontalface_default.xml"
-       paths = []
-       try:
-           paths.append(cv2.data.haarcascades + name)
-       except Exception:
-           pass
-       paths.append(os.path.join(os.path.dirname(cv2.__file__), "data", name))
-       for p in paths:
-           if os.path.exists(p):
-               c = cv2.CascadeClassifier(p)
-               if not c.empty():
-                   return c
-       return None
+    name = "haarcascade_frontalface_default.xml"
+    paths = []
+    try:
+        paths.append(cv2.data.haarcascades + name)
+    except Exception:
+        pass
+    paths.append(os.path.join(os.path.dirname(cv2.__file__), "data", name))
+    for p in paths:
+        if os.path.exists(p):
+            c = cv2.CascadeClassifier(p)
+            if not c.empty():
+                return c
+    return None
 
-   cascade = _load_cascade()
+cascade = _load_cascade()
 
 def crop_face(img, margin=1.8):
     img = img.convert("RGB")
