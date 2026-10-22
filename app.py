@@ -48,12 +48,27 @@ def load_generator():
     return g, cfg["z_dim"]
 
 G, Z_DIM = load_generator()
-cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+   def _load_cascade():
+       name = "haarcascade_frontalface_default.xml"
+       paths = []
+       try:
+           paths.append(cv2.data.haarcascades + name)
+       except Exception:
+           pass
+       paths.append(os.path.join(os.path.dirname(cv2.__file__), "data", name))
+       for p in paths:
+           if os.path.exists(p):
+               c = cv2.CascadeClassifier(p)
+               if not c.empty():
+                   return c
+       return None
+
+   cascade = _load_cascade()
 
 def crop_face(img, margin=1.8):
     img = img.convert("RGB")
     gray = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
-    found = cascade.detectMultiScale(gray, 1.1, 5, minSize=(40, 40))
+    found = cascade.detectMultiScale(gray, 1.1, 5, minSize=(40, 40)) if cascade is not None else []
     h, w = gray.shape
     if len(found):
         x, y, fw, fh = max(found, key=lambda f: f[2] * f[3])
