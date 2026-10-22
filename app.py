@@ -48,7 +48,7 @@ def load_generator():
     return g, cfg["z_dim"]
 
 G, Z_DIM = load_generator()
-   def _load_cascade():
+def _load_cascade():
        name = "haarcascade_frontalface_default.xml"
        paths = []
        try:
